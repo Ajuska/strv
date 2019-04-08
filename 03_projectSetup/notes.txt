@@ -1,0 +1,31 @@
+npm install -D eslint @strv/eslint-config-javascript@latest
+
+npm audit
+- about databases, if there are some problems
+
+editor config
+- good to have when working on different platforms (windows, linux)
+- rules for spaces, ending of lines
+
+semantic-release
+- tag your commits so relase go more smoothly
+
+dev tools
+- official way how to debug nodejs
+- runs with node --inspect-brk . ==> open in browser and enjoy
+
+n
+- versioning of nodejs
+
+
+UDP
+- protocol alows to send request and get response
+- does not guarantee that request will pass till end
+
+
+TCP
+- does guarantee that request will pass and response will be delivered
+- mutual connection is established
+- all is confirmed
+- stateful connection
+

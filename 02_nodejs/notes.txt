@@ -1,0 +1,9 @@
+nginxs  - request initially solved with forks(new context for each request)
+        - ten with threads (also problematic, issues with memory)
+        - event loop -> 
+
+nodejs  - single thread
+        - uses V8 engine
+        - heap / stack(instructions)
+        -  
+
