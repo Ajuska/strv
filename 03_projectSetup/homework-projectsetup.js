@@ -1,66 +1,100 @@
-// store articles in something better than database
-// add eslint
-// implement endpoints
+// store articles in something better than array --> database?
+// add eslint --> npx eslint homework-projectsetup.js
+// implement endpoints (GET, POST, PUT, DELETE)
 // use pino (logs)
 // everytime request will come in, log the info, not just about these routes
 
 
 'use strict'
 
-const   Koa = require('koa'),
-        Router = require('koa-router'),
-        Bodyparser = require('koa-body'),
-        Logger = require('koa-pino-logger')
+const Koa = require('koa')
+const Router = require('koa-router')
+const bodyparser = require('koa-body')
+const logger = require('koa-pino-logger')
 
-const   app = new Koa(),
-        router = new Router()
+const app = new Koa()
+const router = new Router()
 
-let articles = [
+const BASE_URL = '/api/v1/articles'
+
+const articles = [
     {
-        name: 'How to train your dragon.'
+        name: 'How to train your dragon.',
+        rating: 10,
+        likes: 987,
     },
     {
-        name: 'What to buy for STRV course.'
+        name: 'What to buy for STRV course.',
+        rating: 9,
+        likes: 362,
+    },
+    {
+        name: '10 things you should never do in Koa.',
+        rating: 3,
+        likes: 10,
+    },
+]
+
+router.get(`${BASE_URL}/:id`, ctx => {
+    try {
+        const article = articles[ctx.params.id]
+        ctx.status = 200
+        ctx.body = {
+            status: 'success',
+            data: article,
+        }
+    } catch (err) {
+        console.log(err)
     }
-];
+})
 
-router.get('/articles/:id', ctx => {
-    ctx.body = articles[ctx.params.id];
-});
+router.post(`${BASE_URL}/create`, ctx => {
+    try {
+        const body = ctx.request.body
+        articles.push(body)
+        ctx.status = 201
+        ctx.body = {
+            status: 'success',
+            message: 'article created', 
+        }
+    } catch (err) {
+        console.log(err)
+    }
+})
 
-router.post('/articles/create', ctx => {
-    const body = ctx.request.body;
-    articles.push(body)
-    ctx.body = { status: "success"}
-});
+router.put(`${BASE_URL}/:id`, ctx => {
+    try {
+        const body = ctx.request.body
+        articles[ctx.params.id] = body
+        ctx.status = 200
+        ctx.body = {
+            status: 'success',
+            message: 'article updated' }
+    } catch (err) {
+        console.log(err)
+    }
+})
 
-router.put('/articles/:id', ctx => {
-    ctx.body = Object.assign(articles[ctx.params.id], ctx.request.body);
-});
+router.delete(`${BASE_URL}/:id`, ctx => {
+    try {
+        articles.splice([ctx.params.id], 1)
+        ctx.status = 200
+        ctx.body = {
+            status: 'success',
+            message: 'article removed',
+        }
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 // App middleware
 app
-    .use(Bodyparser())
+    .use(bodyparser())
     .use(router.allowedMethods())
     .use(router.routes())
-    .use(Logger());
+    .use(logger())
 
 
-app.listen(3000, () => console.log('Server started ...'));
-
-
-
-// router.get('articles')
-// router.get('articles/:id/')
-// router.delele('articles/:id/')
-// router.patch('articles/:id/')
-// router.put('articles/:id/')
-
-// const article = {
-//     id: '123',
-//     text: 'hola!',
-// }
-
-
-
+app.listen(3000, () => console.log('Server started ...'))
